@@ -1,6 +1,3 @@
-import Image from "next/image";
-import Link from "next/link";
-import LinksPage from "@/app/components/LinksPage";
 import {PasswordPage} from "@/app/components/PasswordPage";
 
 export default function Home() {

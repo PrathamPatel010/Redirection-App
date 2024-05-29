@@ -10,8 +10,6 @@ export const PasswordPage = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log({ password, actualPassword });
-        console.log(password === actualPassword);
         if (password === actualPassword) {
             setIsAuthenticated(true);
         } else {
