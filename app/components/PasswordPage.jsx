@@ -7,18 +7,26 @@ export const PasswordPage = () => {
     const [ack,setAck] = useState('');
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const actualPassword = process.env.NEXT_PUBLIC_PASSWORD;
+    const superUserPassword = process.env.NEXT_PUBLIC_SUPER_USER_PASSWORD;
+    const [superUser,setSuperUser] = useState(false);
 
     const handleSubmit = (e) => {
         e.preventDefault();
         if (password === actualPassword) {
             setIsAuthenticated(true);
-        } else {
+            return;
+        }
+        if (password===superUserPassword){
+            setIsAuthenticated(true);
+            setSuperUser(true);
+        }
+        else {
             setAck("It's wrong password you trespasser");
         }
     };
 
     if (isAuthenticated) {
-        return <LinksPage />;
+        return <LinksPage extraAuth={superUser}/>;
     }
 
     return (

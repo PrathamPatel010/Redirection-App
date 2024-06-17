@@ -1,24 +1,24 @@
 import Image from "next/image";
 import Link from "next/link";
-
-export default function LinksPage() {
+import links from "@/app/data/links";
+export default function LinksPage({extraAuth}) {
+    let newLinks = links;
+    if(!extraAuth){
+        newLinks = links.filter((link)=>link.name!=='Attack Mode');
+    }
     return (
+
         <>
             <div className="text-3xl">
                 Links will be here
             </div>
-            <div className="mt-5">
-                <Link className="bg-blue-200 hover:bg-blue-600 hover:text-white rounded-md px-3 py-1" target="_blank" href={'https://prathampatel.notion.site/f7072887e83c45aeaa4fd52270ceac44'}>Backend Engineering Page</Link>
-            </div>
-            <div className="mt-5">
-                <Link className="bg-blue-200 hover:bg-blue-600 hover:text-white rounded-md px-3 py-1" target="_blank" href={'https://prathampatel.notion.site/System-Design-Simplified-a35cd6cc48054585b973bdf7e33746fe'}>System Design Simplified</Link>
-            </div>
-            <div className="mt-5">
-                <Link className="bg-blue-200 hover:bg-blue-600 hover:text-white rounded-md px-3 py-1" target="_blank" href={'https://prathampatel.notion.site/DSA-54023c73b03b49e988eac2f7de95a06c'}>DSA</Link>
-            </div>
-            <div className="mt-5">
-                <Link className="bg-blue-200 hover:bg-blue-600 hover:text-white rounded-md px-3 py-1" target="_blank" href={'https://prathampatel.notion.site/Quick-Schedule-fab350dca7bb426886df408f34dab55c'}>Quick Schedule</Link>
-            </div>
+            {newLinks.map((link,index)=>{
+                return(
+                    <div key={index} className="mt-5">
+                        <Link className="bg-blue-200 hover:bg-blue-600 hover:text-white rounded-md px-3 py-1" target="_blank" href={link.link}>{link.name}</Link>
+                    </div>
+                )
+            })}
         </>
     );
 }
