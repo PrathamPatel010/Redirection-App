@@ -1,46 +1,57 @@
 "use client";
 import { useState } from "react";
 import LinksPage from "@/app/components/LinksPage";
+import axios from "axios";
 
 export const PasswordPage = () => {
     const [password, setPassword] = useState('');
-    const [ack,setAck] = useState('');
+    const [ack, setAck] = useState('');
     const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const actualPassword = process.env.NEXT_PUBLIC_PASSWORD;
-    const superUserPassword = process.env.NEXT_PUBLIC_SUPER_USER_PASSWORD;
-    const [superUser,setSuperUser] = useState(false);
+    const [superUser, setSuperUser] = useState(false);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        if (password === actualPassword) {
-            setIsAuthenticated(true);
-            return;
+        const response = await axios.post('/api/authenticate',{password});
+        console.log(response.data);
+        const {message, status, statusCode} = response.data;
+        if (statusCode===401){
+            setAck(message);
         }
-        if (password===superUserPassword){
-            setIsAuthenticated(true);
+        if (status==='User'){
+            setAck('Welcome User');
+            setTimeout(()=>{
+                setIsAuthenticated(true);
+                return;
+            },2000);
+        }
+        if (status==='Super User'){
             setSuperUser(true);
-        }
-        else {
-            setAck("It's wrong password you trespasser");
+            setAck('Welcome Super User');
+            setTimeout(()=>{
+                setIsAuthenticated(true);
+                return;
+            },2000);
         }
     };
 
     if (isAuthenticated) {
-        return <LinksPage extraAuth={superUser}/>;
+        return <LinksPage superUser={superUser} />;
     }
 
     return (
-        <section className={'flex justify-center items-center'}>
-            <form onSubmit={handleSubmit} className={'flex flex-col gap-2 justify-center'}>
-                <label>Enter the password you fucking trespasser</label>
+        <section className="flex justify-center items-center">
+            <form onSubmit={handleSubmit} className="flex flex-col gap-2 justify-center">
+                <label className={'bg-red-500 text-white rounded-md p-2'}>This is FBI. Identify yourself by entering password</label>
                 <input
                     type="password"
                     onChange={(e) => setPassword(e.target.value)}
-                    className={'p-2 rounded-md'}
-                    placeholder={'Password'}
+                    className="p-2 rounded-md"
+                    placeholder="Password"
                 />
-                <button className={'p-2 rounded-md bg-gray-500 text-white hover:bg-black hover:text-white'} type={'submit'}>Let me Enter</button>
-                <div>{ack}</div>
+                <button className="p-2 rounded-md bg-gray-500 text-white hover:bg-black hover:text-white" type="submit">
+                    Let me Enter
+                </button>
+                <div className={'text-red-600 text-3xl'}>{ack}</div>
             </form>
         </section>
     );

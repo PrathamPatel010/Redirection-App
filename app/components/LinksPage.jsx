@@ -1,16 +1,17 @@
 import Image from "next/image";
 import Link from "next/link";
 import links from "@/app/data/links";
-export default function LinksPage({extraAuth}) {
+export default function LinksPage({superUser}) {
     let newLinks = links;
-    if(!extraAuth){
-        newLinks = links.filter((link)=>link.name!=='Attack Mode');
+    if (!superUser){
+        newLinks = links.filter(link=>!link.private);
     }
-    return (
 
+    return (
         <>
-            <div className="text-3xl">
-                Links will be here
+            <div className="flex flex-col text-3xl">
+                <span>Viewing as {superUser ? 'Super User' : 'Normal User'}</span>
+                <span>Links will be here</span>
             </div>
             {newLinks.map((link,index)=>{
                 return(
