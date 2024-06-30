@@ -12,7 +12,6 @@ export const PasswordPage = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const response = await axios.post('/api/authenticate',{password});
-        console.log(response.data);
         const {message, status, statusCode} = response.data;
         if (statusCode===401){
             setAck(message);
